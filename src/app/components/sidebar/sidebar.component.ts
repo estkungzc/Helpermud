@@ -22,7 +22,7 @@ export const ROUTES: RouteInfo[] = [
 export class SidebarComponent implements OnInit {
     public menuItems: any[];
 
-    constructor(private auth: AuthService) {
+    constructor(public auth: AuthService) {
 
     }
 
