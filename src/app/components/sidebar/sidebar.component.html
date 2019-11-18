@@ -1,12 +1,12 @@
 
 <div class="sidebar-wrapper">
   <div class="logo">
-    <a href="http://www.creative-tim.com" class="simple-text logo-mini">
+    <a [routerLink]="['/dashboard']" class="simple-text logo-mini">
       <div class="logo-image-small">
         <img src="https://cdn0.iconfinder.com/data/icons/smart-farm-flat-agriculture-technology/512/Smart_sensor-512.png">
       </div>
     </a>
-    <a href="https://www.creative-tim.com" class="simple-text logo-normal">
+    <a [routerLink]="['/dashboard']" class="simple-text logo-normal">
       Sansara Farm
     </a>
   </div>
@@ -17,5 +17,11 @@
                 <p>{{menuItem.title}}</p>
             </a>
         </li>
+        <li>
+          <a (click)="auth.signOut()">
+              <i class="nc-icon nc-button-power"></i>
+              <p>Sign out</p>
+          </a>
+      </li>
     </ul>
 </div>

@@ -1,0 +1,113 @@
+<div class="container" style="padding-top: 56px;">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+      <div class="card">
+        <div class="card-body">
+          <div class="row justify-content-center">
+            <img
+              src="https://cdn0.iconfinder.com/data/icons/smart-farm-flat-agriculture-technology/512/Smart_sensor-512.png"
+              width="100"
+              height="100"
+            />
+          </div>
+          <div class="row justify-content-center">
+            <h2 class="text-dark">Sansara Farm</h2>
+          </div>
+          <form
+            role="form"
+            class="mx-4"
+            #f="ngForm"
+            (ngSubmit)="onSubmit(f)"
+          >
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Name"
+                required
+                name="name"
+                ngModel
+                #name="ngModel"
+              />
+            </div>
+            <div class="form-group">
+              <div class="form-group">
+                <label for="email">Email address</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  placeholder="Email"
+                  required
+                  name="email"
+                  ngModel
+                  pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+                  #email="ngModel"
+                />
+                <small
+                  class="text-danger"
+                  [hidden]="email.valid || (email.pristine && !f.submitted)"
+                >
+                  Enter the email correctly</small
+                >
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                placeholder="Password"
+                required
+                minlength="6"
+                name="password"
+                ngModel
+                validateEqual="repassword"
+                reverse="true"
+                #password="ngModel"
+              />
+              <small
+                class="text-danger"
+                [hidden]="password.valid || (password.pristine && !f.submitted)"
+                >Passwords must be at least 6 characters in length.</small
+              >
+            </div>
+            <div class="form-group">
+              <label for="password">Confirm Password</label>
+              <input
+                type="password"
+                class="form-control"
+                placeholder="Re-Password"
+                required
+                name="repassword"
+                ngModel
+                validateEqual="password"
+                #repassword="ngModel"
+              />
+              <small
+                class="text-danger"
+                [hidden]="
+                  repassword.valid || (repassword.pristine && !f.submitted)
+                "
+                >Mismatch</small
+              >
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary mt-4">
+                Create account
+              </button>
+            </div>
+            <div class="text-center">
+              <a
+                [routerLink]="['/signin']"
+                routerLinkActive="active"
+
+                ><small>Go back to Sign in</small></a
+              >
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
