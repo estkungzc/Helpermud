@@ -1,3 +1,7 @@
+<div class="row"
+     style="padding: 2px 2px 2px 15px !important;">
+  <p>อัพเดทค่าเมื่อ :</p>
+</div>
 <div class="row">
   <div class="col-lg-3 col-md-6 col-sm-6">
     <div class="card card-stats">
@@ -5,13 +9,13 @@
         <div class="row">
           <div class="col-5 col-md-4">
             <div class="icon-big text-center icon-warning">
-              <i class="nc-icon nc-globe text-warning"></i>
+              <i class="fas fa-temperature-low text-warning"></i>
             </div>
           </div>
           <div class="col-7 col-md-8">
             <div class="numbers">
-              <p class="card-category">Capacity</p>
-              <p class="card-title">150GB
+              <p class="card-category">อากาศ</p>
+              <p class="card-title">อุณหภูมิ
                 <p>
             </div>
           </div>
@@ -19,8 +23,15 @@
       </div>
       <div class="card-footer ">
         <hr>
-        <div class="stats">
-          <i class="fa fa-refresh"></i> Update Now
+        <div class="d-flex justify-content-center">
+          <ngx-gauge [type]="gaugeType"
+                     [thick]="10"
+                     [value]="lastedSensor.airTemperature"
+                     [label]="gaugeTempLabel"
+                     [append]="gaugeTempAppendText"
+                     [thresholds]= "thresholdConfig">
+          </ngx-gauge>
+
         </div>
       </div>
     </div>
@@ -31,13 +42,13 @@
         <div class="row">
           <div class="col-5 col-md-4">
             <div class="icon-big text-center icon-warning">
-              <i class="nc-icon nc-money-coins text-success"></i>
+              <i class="fas fa-cloud-rain text-info"></i>
             </div>
           </div>
           <div class="col-7 col-md-8">
             <div class="numbers">
-              <p class="card-category">Revenue</p>
-              <p class="card-title">$ 1,345
+              <p class="card-category">อากาศ</p>
+              <p class="card-title">ความชื้น
                 <p>
             </div>
           </div>
@@ -45,8 +56,15 @@
       </div>
       <div class="card-footer ">
         <hr>
-        <div class="stats">
-          <i class="fa fa-calendar-o"></i> Last day
+        <div class="d-flex justify-content-center">
+          <ngx-gauge [type]="gaugeType"
+                     [thick]="10"
+                     [value]="lastedSensor.airHumidity"
+                     [label]="gaugeHumidLabel"
+                     [append]="gaugeHumidAppendText"
+                     [thresholds]= "thresholdConfig">
+          </ngx-gauge>
+
         </div>
       </div>
     </div>
@@ -57,13 +75,13 @@
         <div class="row">
           <div class="col-5 col-md-4">
             <div class="icon-big text-center icon-warning">
-              <i class="nc-icon nc-vector text-danger"></i>
+              <i class="fas fa-thermometer-three-quarters text-success"></i>
             </div>
           </div>
           <div class="col-7 col-md-8">
             <div class="numbers">
-              <p class="card-category">Errors</p>
-              <p class="card-title">23
+              <p class="card-category">ดิน</p>
+              <p class="card-title">อุณหภูมิ
                 <p>
             </div>
           </div>
@@ -71,8 +89,15 @@
       </div>
       <div class="card-footer ">
         <hr>
-        <div class="stats">
-          <i class="fa fa-clock-o"></i> In the last hour
+        <div class="d-flex justify-content-center">
+          <ngx-gauge [type]="gaugeType"
+                     [thick]="10"
+                     [value]="lastedSensor.soilTemperature"
+                     [label]="gaugeTempLabel"
+                     [append]="gaugeTempAppendText"
+                     [thresholds]= "thresholdConfig">
+          </ngx-gauge>
+
         </div>
       </div>
     </div>
@@ -83,13 +108,13 @@
         <div class="row">
           <div class="col-5 col-md-4">
             <div class="icon-big text-center icon-warning">
-              <i class="nc-icon nc-favourite-28 text-primary"></i>
+              <i class="fas fa-tint text-primary"></i>
             </div>
           </div>
           <div class="col-7 col-md-8">
             <div class="numbers">
-              <p class="card-category">Followers</p>
-              <p class="card-title">+45K
+              <p class="card-category">ดิน</p>
+              <p class="card-title">ความชื้น
                 <p>
             </div>
           </div>
@@ -97,8 +122,15 @@
       </div>
       <div class="card-footer ">
         <hr>
-        <div class="stats">
-          <i class="fa fa-refresh"></i> Update now
+        <div class="d-flex justify-content-center">
+          <ngx-gauge [type]="gaugeType"
+                     [thick]="10"
+                     [value]="lastedSensor.soilMoisture"
+                     [label]="gaugeHumidLabel"
+                     [append]="gaugeHumidAppendText"
+                     [thresholds]= "thresholdConfig">
+          </ngx-gauge>
+
         </div>
       </div>
     </div>
@@ -108,11 +140,35 @@
   <div class="col-md-12">
     <div class="card ">
       <div class="card-header ">
-        <h5 class="card-title">Users Behavior</h5>
-        <p class="card-category">24 Hours performance</p>
+        <h5 class="card-title">กราฟ</h5>
+        <p class="card-category">แสดงผลข้อมูลจากการติดตามของระบบเซนเซอร์</p>
       </div>
       <div class="card-body ">
-        <canvas id=chartHours width="400" height="100"></canvas>
+        <div>
+          <tabset [justified]="true">
+            <br>
+            <tab heading="อุณหภูมิ(อากาศ)"
+                 id="tab1">
+              <canvas id=airTempChart
+                      width="400"
+                      height="150"></canvas>
+            </tab>
+            <tab heading="ความชื้น(อากาศ)">
+              <canvas id=airHumidChart
+                      width="400"
+                      height="150"></canvas>
+            </tab>
+            <tab heading="อุณหภูมิ(ดิน)">
+              <canvas id=soilTempChart
+                      width="400"
+                      height="200"></canvas>
+            </tab>
+            <tab heading="ความชื้น(ดิน)">
+
+            </tab>
+          </tabset>
+        </div>
+
       </div>
       <div class="card-footer ">
         <hr>
@@ -123,49 +179,84 @@
     </div>
   </div>
 </div>
+
+
 <div class="row">
+  <!-- <div class="col-md-5">
+      <div class="card card-stats">
+          <div class="card-body ">
+            <div class="row">
+              <div class="col-5 col-md-4">
+                <div class="icon-big text-center icon-warning">
+                  <i class="fas fa-sun-dust text-warning"></i>
+                </div>
+              </div>
+              <div class="col-7 col-md-8">
+                <div class="numbers">
+                  <p class="card-category">PM2.5</p>
+                  <p class="card-title">ฝุ่น
+                    <p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer ">
+            <hr>
+            <div class="d-flex justify-content-center">
+              <ngx-gauge [type]="gaugeType"
+                         [thick]="10"
+                         [value]="gaugeValue"
+                         [label]="'ไมโครกรัมต่อลูกบาศก์เมตร'">
+              </ngx-gauge>
+
+            </div>
+          </div>
+        </div>
+  </div> -->
   <div class="col-md-4">
-    <div class="card ">
-      <div class="card-header ">
-        <h5 class="card-title">Email Statistics</h5>
-        <p class="card-category">Last Campaign Performance</p>
-      </div>
-      <div class="card-body ">
-        <canvas id="chartEmail"></canvas>
-      </div>
-      <div class="card-footer ">
-        <div class="legend">
-          <i class="fa fa-circle text-primary"></i> Opened
-          <i class="fa fa-circle text-warning"></i> Read
-          <i class="fa fa-circle text-danger"></i> Deleted
-          <i class="fa fa-circle text-gray"></i> Unopened
+      <div class="card ">
+          <div class="card-header ">
+            <h5 class="card-title">วาล์วน้ำ</h5>
+            <p class="card-category">รูปแบบการควบคุม : รดน้ำอัตโนมัติ</p>
+          </div>
+          <div class="card-body ">
+
+            <div class="d-flex justify-content-center">
+              <ui-switch [loading]="isLoading"
+                         [beforeChange]="fakeAsync"
+                         [(ngModel)]="enable"
+                         size="large">
+                <i class="fa fa-check"
+                   *ngIf="enable && !isLoading"></i>
+                <i class="fa fa-times"
+                   *ngIf="!enable && !isLoading"></i>
+                <i class="fa fa-spinner fa-pulse"
+                   *ngIf="isLoading"></i>
+              </ui-switch>
+            </div>
+
+            <!-- <canvas id="chartEmail"></canvas> -->
+
+
+            <!-- <div class="card-body "> -->
+
+            <!-- </div> -->
+          </div>
+          <div class="card-footer ">
+            <p>สถานะ : {{ enable && !isLoading ? 'เปิดการใช้งาน' : 'ปิดการใช้งาน'}}</p>
+            <hr>
+            <div class="stats">
+              <a href=""><i class="fas fa-cogs"></i> ตั้งค่าการควบคุมวาล์ว</a>
+            </div>
+          </div>
         </div>
-        <hr>
-        <div class="stats">
-          <i class="fa fa-calendar"></i> Number of emails sent
-        </div>
-      </div>
     </div>
-  </div>
-  <div class="col-md-8">
-    <div class="card card-chart">
-      <div class="card-header">
-        <h5 class="card-title">NASDAQ: AAPL</h5>
-        <p class="card-category">Line Chart with Points</p>
-      </div>
-      <div class="card-body">
-        <canvas id="speedChart" width="400" height="100"></canvas>
-      </div>
-      <div class="card-footer">
-        <div class="chart-legend">
-          <i class="fa fa-circle text-info"></i> Tesla Model S
-          <i class="fa fa-circle text-warning"></i> BMW 5 Series
-        </div>
-        <hr/>
-        <div class="card-stats">
-          <i class="fa fa-check"></i> Data information certified
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
+<!-- <button [swal]="deleteSwal">Delete {{ file.name }}</button>
+
+<swal
+  #deleteSwal
+  title="Delete ?"
+  text="This cannot be undone"
+  icon="question">
+</swal> -->

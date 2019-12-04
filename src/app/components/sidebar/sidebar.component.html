@@ -1,27 +1,32 @@
-
 <div class="sidebar-wrapper">
   <div class="logo">
     <a [routerLink]="['/dashboard']" class="simple-text logo-mini">
       <div class="logo-image-small">
-        <img src="https://cdn0.iconfinder.com/data/icons/smart-farm-flat-agriculture-technology/512/Smart_sensor-512.png">
+        <!-- <img
+          src="assets/img/iconfinder_Smart_sensor_4629045.png"
+        /> -->
       </div>
     </a>
     <a [routerLink]="['/dashboard']" class="simple-text logo-normal">
       Sansara Farm
     </a>
   </div>
-    <ul class="nav">
-        <li *ngFor="let menuItem of menuItems" routerLinkActive="active" class="{{menuItem.class}}">
-            <a [routerLink]="[menuItem.path]">
-                <i class="nc-icon {{menuItem.icon}}"></i>
-                <p>{{menuItem.title}}</p>
-            </a>
-        </li>
-        <li>
-          <a (click)="auth.signOut()">
-              <i class="nc-icon nc-button-power"></i>
-              <p>Sign out</p>
-          </a>
-      </li>
-    </ul>
+  <ul class="nav">
+    <li
+      *ngFor="let menuItem of menuItems"
+      routerLinkActive="active"
+      class="{{ menuItem.class }}"
+    >
+      <a [routerLink]="[menuItem.path]">
+        <i class="nc-icon {{ menuItem.icon }}"></i>
+        <p>{{ menuItem.title }}</p>
+      </a>
+    </li>
+    <li>
+      <a (click)="auth.signOut()">
+        <i class="fas fa-sign-out-alt"></i>
+        <p>ออกจากระบบ</p>
+      </a>
+    </li>
+  </ul>
 </div>

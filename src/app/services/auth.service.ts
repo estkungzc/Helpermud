@@ -48,7 +48,8 @@ export class AuthService {
         password
       );
       this.updateUser(displayName, credential.user);
-      return this.router.navigate(['/signin']);
+      // return this.router.navigate(['/signin']);
+      return this.signIn(email, password);
     } catch (err) {
       console.log(err);
     }

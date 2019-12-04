@@ -1,209 +1,256 @@
 import { Component, OnInit } from '@angular/core';
 import Chart from 'chart.js';
-
+import { Observable } from 'rxjs';
+import { DashboardService } from 'src/app/services/dashboard.service';
+import { Sensor, SensorData } from 'src/app/models/sensors.model';
+import { map, last } from 'rxjs/operators';
+import * as moment from 'moment';
 
 @Component({
-    selector: 'dashboard-cmp',
-    moduleId: module.id,
-    templateUrl: 'dashboard.component.html'
+  selector: "dashboard-cmp",
+  moduleId: module.id,
+  templateUrl: 'dashboard.component.html',
+  styles: [
+    `
+      ngx-gauge {
+        height: 150px !important;
+      }
+    `
+  ]
 })
+export class DashboardComponent implements OnInit {
+  gaugeType = 'semi';
+  gaugeTempLabel = 'องศาเซลเซียส';
+  gaugeTempAppendText = '°C';
+  gaugeHumidLabel = 'เปอร์เซ็นต์';
+  gaugeHumidAppendText = '%';
+  thresholdConfig = {
+    '0': { color: 'green' },
+    '40': { color: 'orange' },
+    '75.5': { color: 'red' }
+  };
 
-export class DashboardComponent implements OnInit{
+  enable = true;
+  isLoading = false;
+  fakeAsync: Observable<boolean> = new Observable(observer => {
+    this.isLoading = true;
+    const timeout = setTimeout(() => {
+      this.isLoading = false;
+      observer.next(true);
+    }, 2000);
+    return () => clearTimeout(timeout);
+  });
 
-  public canvas : any;
+  lastedSensor: Sensor = {
+    airHumidity: 0,
+    airTemperature: 0,
+    soilMoisture: 0,
+    soilTemperature: 0
+  };
+
+  public canvas: any;
   public ctx;
-  public chartColor;
   public chartEmail;
   public chartHours;
+  public airTempChart;
+  public airHumidChart;
+  public soilTempChart;
 
-    ngOnInit(){
-      this.chartColor = "#FFFFFF";
+  constructor(private db: DashboardService) {}
 
-      this.canvas = document.getElementById("chartHours");
-      this.ctx = this.canvas.getContext("2d");
+  ngOnInit() {
+    this.canvas = document.getElementById('soilTempChart');
+    this.ctx = this.canvas.getContext('2d');
 
-      this.chartHours = new Chart(this.ctx, {
-        type: 'line',
+    this.soilTempChart = new Chart(this.ctx, {
+      type: 'line',
+      data: {
+        datasets: [
+          {
+            borderColor: '#6bd098',
+            backgroundColor: '#6bd098',
+            borderWidth: 2,
+            fill: false,
+            label: 'เซนเซอร์จุดตรงกลาง',
+            data: []
+          },
+          {
+            borderColor: '#fcc468',
+            backgroundColor: '#fcc468',
+            borderWidth: 2,
+            fill: false,
+            label: 'ค่าเฉลี่ยเซนเซอร์',
+            borderDash: [10, 5],
+            data: []
+          },
+          {
+            borderColor: '#f17e5d',
+            backgroundColor: '#f17e5d',
+            borderWidth: 2,
+            fill: false,
+            label: 'เซนเซอร์จุดหน้าประตู',
+            data: []
+          }
+        ]
+      },
 
-        data: {
-          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"],
-          datasets: [{
-              borderColor: "#6bd098",
-              backgroundColor: "#6bd098",
-              pointRadius: 0,
-              pointHoverRadius: 0,
-              borderWidth: 3,
-              data: [300, 310, 316, 322, 330, 326, 333, 345, 338, 354]
-            },
+      options: {
+        legend: {
+          display: true,
+          position: 'top'
+        },
+
+        tooltips: {
+          enabled: true
+        },
+
+        scales: {
+          yAxes: [
             {
-              borderColor: "#f17e5d",
-              backgroundColor: "#f17e5d",
-              pointRadius: 0,
-              pointHoverRadius: 0,
-              borderWidth: 3,
-              data: [320, 340, 365, 360, 370, 385, 390, 384, 408, 420]
-            },
+              ticks: {
+                fontColor: '#9f9f9f',
+                beginAtZero: false,
+                maxTicksLimit: 10
+              },
+              gridLines: {
+                drawBorder: false,
+                zeroLineColor: '#ccc',
+                color: 'rgba(255,255,255,0.05)'
+              }
+            }
+          ],
+
+          xAxes: [
             {
-              borderColor: "#fcc468",
-              backgroundColor: "#fcc468",
-              pointRadius: 0,
-              pointHoverRadius: 0,
-              borderWidth: 3,
-              data: [370, 394, 415, 409, 425, 445, 460, 450, 478, 484]
+              type: 'time',
+              distribution: 'series'
             }
           ]
-        },
-        options: {
-          legend: {
-            display: false
-          },
-
-          tooltips: {
-            enabled: false
-          },
-
-          scales: {
-            yAxes: [{
-
-              ticks: {
-                fontColor: "#9f9f9f",
-                beginAtZero: false,
-                maxTicksLimit: 5,
-                //padding: 20
-              },
-              gridLines: {
-                drawBorder: false,
-                zeroLineColor: "#ccc",
-                color: 'rgba(255,255,255,0.05)'
-              }
-
-            }],
-
-            xAxes: [{
-              barPercentage: 1.6,
-              gridLines: {
-                drawBorder: false,
-                color: 'rgba(255,255,255,0.1)',
-                zeroLineColor: "transparent",
-                display: false,
-              },
-              ticks: {
-                padding: 20,
-                fontColor: "#9f9f9f"
-              }
-            }]
-          },
         }
-      });
+      }
+    });
 
+    const data$ = this.db.getSensorsValue().pipe(
+      map(k =>
+        k.map(x => {
+          return {
+            dataLoc1: {
+              airHumidity: Number(x.dataLoc1.airHumidity),
+              airTemperature: Number(x.dataLoc1.airTemperature),
+              soilMoisture: Number(x.dataLoc1.soilMoisture),
+              soilTemperature: Number(x.dataLoc1.soilTemperature)
+            },
+            dataLoc2: {
+              airHumidity: Number(x.dataLoc2.airHumidity),
+              airTemperature: Number(x.dataLoc2.airTemperature),
+              soilMoisture: Number(x.dataLoc2.soilMoisture),
+              soilTemperature: Number(x.dataLoc2.soilTemperature)
+            },
+            time: x.time
+          } as SensorData;
+        })
+      )
+    );
+    data$.subscribe(x => {
+      console.log(x);
+      if (x.length > 0) {
+        const lastValue = x.pop();
+        console.log(moment.unix(lastValue.time).toDate());
+        const avgAirHumid =
+          (lastValue.dataLoc1.airHumidity + lastValue.dataLoc2.airHumidity) / 2;
+        const avgAirTemp =
+          (lastValue.dataLoc1.airTemperature +
+            lastValue.dataLoc2.airTemperature) /
+          2;
+        const avgSoilMois =
+          (lastValue.dataLoc1.soilMoisture + lastValue.dataLoc2.soilMoisture) /
+          2;
+        const avgSoilTemp =
+          (lastValue.dataLoc1.soilTemperature +
+            lastValue.dataLoc2.soilTemperature) /
+          2;
+        this.lastedSensor = {
+          airHumidity: avgAirHumid,
+          airTemperature: avgAirTemp,
+          soilMoisture: avgSoilMois,
+          soilTemperature: avgSoilTemp
+        };
+        console.log(this.lastedSensor);
 
-      this.canvas = document.getElementById("chartEmail");
-      this.ctx = this.canvas.getContext("2d");
-      this.chartEmail = new Chart(this.ctx, {
-        type: 'pie',
-        data: {
-          labels: [1, 2, 3],
-          datasets: [{
-            label: "Emails",
-            pointRadius: 0,
-            pointHoverRadius: 0,
-            backgroundColor: [
-              '#e3e3e3',
-              '#4acccd',
-              '#fcc468',
-              '#ef8157'
-            ],
-            borderWidth: 0,
-            data: [342, 480, 530, 120]
-          }]
-        },
+        console.log('SoilTempChart');
+        // this.updateAirTempChart(x);
+        this.updateSoilTempChart(this.soilTempChart, x);
+      } else {
+        console.log('????');
+      }
+    });
+  }
 
-        options: {
-
-          legend: {
-            display: false
+  updateAirTempChart(data: SensorData[]) {
+    this.airTempChart = new Chart(document.getElementById('airTempChart'), {
+      type: 'line',
+      data: {
+        labels: [1500, 1600, 1700, 1750, 1800, 1850, 1900, 1950, 1999, 2050],
+        datasets: [
+          {
+            data: [86, 114, 106, 106, 107, 111, 133, 221, 783, 2478],
+            label: 'Africa',
+            borderColor: '#3e95cd',
+            fill: false
           },
-
-          pieceLabel: {
-            render: 'percentage',
-            fontColor: ['white'],
-            precision: 2
+          {
+            data: [282, 350, 411, 502, 635, 809, 947, 1402, 3700, 5267],
+            label: 'Asia',
+            borderColor: '#8e5ea2',
+            fill: false
           },
-
-          tooltips: {
-            enabled: false
+          {
+            data: [168, 170, 178, 190, 203, 276, 408, 547, 675, 734],
+            label: 'Europe',
+            borderColor: '#3cba9f',
+            fill: false
           },
-
-          scales: {
-            yAxes: [{
-
-              ticks: {
-                display: false
-              },
-              gridLines: {
-                drawBorder: false,
-                zeroLineColor: "transparent",
-                color: 'rgba(255,255,255,0.05)'
-              }
-
-            }],
-
-            xAxes: [{
-              barPercentage: 1.6,
-              gridLines: {
-                drawBorder: false,
-                color: 'rgba(255,255,255,0.1)',
-                zeroLineColor: "transparent"
-              },
-              ticks: {
-                display: false,
-              }
-            }]
+          {
+            data: [40, 20, 10, 16, 24, 38, 74, 167, 508, 784],
+            label: 'Latin America',
+            borderColor: '#e8c3b9',
+            fill: false
           },
-        }
-      });
+          {
+            data: [6, 3, 2, 2, 7, 26, 82, 172, 312, 433],
+            label: 'North America',
+            borderColor: '#c45850',
+            fill: false
+          }
+        ]
+      }
+    });
+  }
 
-      var speedCanvas = document.getElementById("speedChart");
-
-      var dataFirst = {
-        data: [0, 19, 15, 20, 30, 40, 40, 50, 25, 30, 50, 70],
-        fill: false,
-        borderColor: '#fbc658',
-        backgroundColor: 'transparent',
-        pointBorderColor: '#fbc658',
-        pointRadius: 4,
-        pointHoverRadius: 4,
-        pointBorderWidth: 8,
+  updateSoilTempChart(chart, data: SensorData[]) {
+    const d1 = data.map(k => {
+      return {
+        x: moment.unix(k.time).toDate(),
+        y: k.dataLoc1.soilTemperature
       };
-
-      var dataSecond = {
-        data: [0, 5, 10, 12, 20, 27, 30, 34, 42, 45, 55, 63],
-        fill: false,
-        borderColor: '#51CACF',
-        backgroundColor: 'transparent',
-        pointBorderColor: '#51CACF',
-        pointRadius: 4,
-        pointHoverRadius: 4,
-        pointBorderWidth: 8
+    });
+    const d2 = data.map(k => {
+      return {
+        x: moment.unix(k.time).toDate(),
+        y: k.dataLoc2.soilTemperature
       };
-
-      var speedData = {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-        datasets: [dataFirst, dataSecond]
+    });
+    const avg = data.map(k => {
+      return {
+        x: moment.unix(k.time).toDate(),
+        y: (k.dataLoc1.soilTemperature + k.dataLoc2.soilTemperature) / 2
       };
-
-      var chartOptions = {
-        legend: {
-          display: false,
-          position: 'top'
-        }
-      };
-
-      var lineChart = new Chart(speedCanvas, {
-        type: 'line',
-        hover: false,
-        data: speedData,
-        options: chartOptions
-      });
+    });
+    // console.log('hello world');
+    const p = [d1, avg, d2];
+    for (let index = 0; index < 3; index++) {
+      chart.data.datasets[index].data = p[index];
     }
+    chart.update();
+  }
 }
