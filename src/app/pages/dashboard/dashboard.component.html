@@ -1,6 +1,6 @@
 <div class="row"
      style="padding: 2px 2px 2px 15px !important;">
-  <p>อัพเดทค่าเมื่อ :</p>
+  <p>อัพเดทค่าเมื่อ : {{ nowDate }}</p>
 </div>
 <div class="row">
   <div class="col-lg-3 col-md-6 col-sm-6">
@@ -151,12 +151,12 @@
                  id="tab1">
               <canvas id=airTempChart
                       width="400"
-                      height="150"></canvas>
+                      height="200"></canvas>
             </tab>
             <tab heading="ความชื้น(อากาศ)">
               <canvas id=airHumidChart
                       width="400"
-                      height="150"></canvas>
+                      height="200"></canvas>
             </tab>
             <tab heading="อุณหภูมิ(ดิน)">
               <canvas id=soilTempChart
@@ -164,7 +164,9 @@
                       height="200"></canvas>
             </tab>
             <tab heading="ความชื้น(ดิน)">
-
+              <canvas id=soilMoisChart
+                      width="400"
+                      height="200"></canvas>
             </tab>
           </tabset>
         </div>
@@ -173,46 +175,14 @@
       <div class="card-footer ">
         <hr>
         <div class="stats">
-          <i class="fa fa-history"></i> Updated 3 minutes ago
+          <i class="fa fa-history"></i> อัพเดทเมื่อ {{ fromNowDate }}
         </div>
       </div>
     </div>
   </div>
 </div>
 
-
 <div class="row">
-  <!-- <div class="col-md-5">
-      <div class="card card-stats">
-          <div class="card-body ">
-            <div class="row">
-              <div class="col-5 col-md-4">
-                <div class="icon-big text-center icon-warning">
-                  <i class="fas fa-sun-dust text-warning"></i>
-                </div>
-              </div>
-              <div class="col-7 col-md-8">
-                <div class="numbers">
-                  <p class="card-category">PM2.5</p>
-                  <p class="card-title">ฝุ่น
-                    <p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card-footer ">
-            <hr>
-            <div class="d-flex justify-content-center">
-              <ngx-gauge [type]="gaugeType"
-                         [thick]="10"
-                         [value]="gaugeValue"
-                         [label]="'ไมโครกรัมต่อลูกบาศก์เมตร'">
-              </ngx-gauge>
-
-            </div>
-          </div>
-        </div>
-  </div> -->
   <div class="col-md-4">
       <div class="card ">
           <div class="card-header ">

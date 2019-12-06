@@ -1,0 +1,99 @@
+<div class="row"
+     style="padding: 2px 2px 2px 15px !important;">
+  <p>อัพเดทค่าเมื่อ : {{ nowDate }}</p>
+</div>
+<div class="row">
+  <div class="col-md-5">
+    <div class="card card-stats alert alert-warning">
+      <div class="card-body ">
+        <div class="row">
+          <div class="col-5 col-md-4">
+            <div class="icon-big text-center icon-warning">
+             <img src="https://image.flaticon.com/icons/svg/2188/2188059.svg" alt="" height="50" width="50">
+            </div>
+          </div>
+          <div class="col-7 col-md-8">
+            <div class="numbers">
+              <p class="card-category">PM2.5</p>
+              <p class="card-title">ฝุ่น
+                <p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer ">
+        <hr>
+        <div class="d-flex justify-content-center">
+          <ngx-gauge [type]="gaugeType"
+                     [thick]="10"
+                     [value]="lastedSensor.pm25"
+                     [label]="'ไมโครกรัมต่อลูกบาศก์เมตร'">
+          </ngx-gauge>
+
+        </div>
+      </div>
+    </div>
+    <div class="card card-stats">
+      <div class="card-body ">
+        <div class="row">
+          <div class="col-5 col-md-4">
+            <div class="icon-big text-center icon-warning">
+             <img src="https://image.flaticon.com/icons/svg/2280/2280972.svg" alt="" height="50" width="50">
+            </div>
+          </div>
+          <div class="col-7 col-md-8">
+            <div class="numbers">
+              <p class="card-category">PM10</p>
+              <p class="card-title">ฝุ่น
+                <p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer ">
+        <hr>
+        <div class="d-flex justify-content-center">
+          <ngx-gauge [type]="gaugeType"
+                     [thick]="10"
+                     [value]="lastedSensor.pm10"
+                     [label]="'ไมโครกรัมต่อลูกบาศก์เมตร'">
+          </ngx-gauge>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-7">
+    <div class="card ">
+      <div class="card-header ">
+        <h5 class="card-title">กราฟ</h5>
+        <p class="card-category">แสดงผลข้อมูลดัชนีคุณภาพอากาศ</p>
+      </div>
+      <div class="card-body ">
+        <div>
+          <tabset [justified]="true">
+            <br>
+            <tab heading="PM2.5"
+                 id="tab1">
+              <canvas id=pm25Chart
+                      width="400"
+                      height="200"></canvas>
+            </tab>
+            <tab heading="PM10">
+              <canvas id=pm10Chart
+                      width="400"
+                      height="200"></canvas>
+            </tab>
+          </tabset>
+        </div>
+
+      </div>
+      <div class="card-footer ">
+        <hr>
+        <div class="stats">
+          <i class="fa fa-history"></i> อัพเดทเมื่อ {{ fromNowDate }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

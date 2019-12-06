@@ -16,4 +16,9 @@ export class DashboardService {
    getSensorsValue(): Observable<RawSensorData[]> {
      return this.dataSensorsRef.valueChanges();
    }
+
+   changeValveState(state: boolean) {
+    return;
+  }
+
 }

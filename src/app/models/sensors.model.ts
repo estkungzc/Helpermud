@@ -23,3 +23,7 @@ export interface Sensor {
   soilMoisture: number;
   soilTemperature: number;
 }
+
+export interface SensorDate extends Sensor {
+  time: any;
+}

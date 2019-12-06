@@ -13,6 +13,7 @@ import { NgxGaugeModule } from 'ngx-gauge';
 import { UiSwitchModule } from 'ngx-ui-switch';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { AirQualityComponent } from 'src/app/pages/air-quality/air-quality.component';
 
 
 @NgModule({
@@ -26,6 +27,9 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     TabsModule.forRoot(),
     SweetAlert2Module.forRoot()
   ],
-  declarations: [DashboardComponent]
+  declarations: [
+    DashboardComponent,
+    AirQualityComponent
+  ]
 })
 export class AdminLayoutModule {}
