@@ -17,10 +17,10 @@
                 #f="ngForm"
                 (ngSubmit)="onSubmit(f)">
             <div class="form-group">
-              <label for="name">Name</label>
+              <label for="name">ชื่อ</label>
               <input type="text"
                      class="form-control"
-                     placeholder="Name"
+                     placeholder="ชื่อ"
                      required
                      name="name"
                      ngModel
@@ -28,10 +28,10 @@
             </div>
             <div class="form-group">
               <div class="form-group">
-                <label for="email">Email address</label>
+                <label for="email">อีเมล</label>
                 <input type="email"
                        class="form-control"
-                       placeholder="Email"
+                       placeholder="อีเมล"
                        required
                        name="email"
                        ngModel
@@ -39,14 +39,14 @@
                        #email="ngModel" />
                 <small class="text-danger"
                        [hidden]="email.valid || (email.pristine && !f.submitted)">
-                  Enter the email correctly</small>
+                  กรุณากรอกอีเมลให้ถูกต้อง</small>
               </div>
             </div>
             <div class="form-group">
-              <label for="password">Password</label>
+              <label for="password">รหัสผ่าน</label>
               <input type="password"
                      class="form-control"
-                     placeholder="Password"
+                     placeholder="รหัสผ่าน"
                      required
                      minlength="6"
                      name="password"
@@ -55,18 +55,22 @@
                      reverse="true"
                      #password="ngModel" />
               <small class="text-danger"
-                     [hidden]="password.valid || (password.pristine && !f.submitted)">Passwords must be at least 6
-                characters in length.</small>
+                     [hidden]="password.valid || (password.pristine && !f.submitted)">รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร</small>
             </div>
             <div class="text-center">
               <button type="submit"
                       class="btn btn-primary mt-4">
-                Create account
+                สร้างบัญชีผู้ใช้งาน
               </button>
             </div>
+            <div *ngIf="!!alerts">
+                <div *ngFor="let alert of alerts">
+                    <alert [type]="alert.type" [dismissOnTimeout]="alert.timeout">{{ alert.msg }}</alert>
+                  </div>
+             </div>
             <div class="text-center">
               <a [routerLink]="['/signin']"
-                 routerLinkActive="active"><small>Go back to Sign in</small></a>
+                 routerLinkActive="active"><small>กลับไปหน้า เข้าสู่ระบบ</small></a>
             </div>
           </form>
         </div>

@@ -29,7 +29,7 @@
                      [value]="lastedSensor.airTemperature"
                      [label]="gaugeTempLabel"
                      [append]="gaugeTempAppendText"
-                     [thresholds]= "thresholdConfig">
+                     [thresholds]="thresholdConfig">
           </ngx-gauge>
 
         </div>
@@ -62,7 +62,7 @@
                      [value]="lastedSensor.airHumidity"
                      [label]="gaugeHumidLabel"
                      [append]="gaugeHumidAppendText"
-                     [thresholds]= "thresholdConfig">
+                     [thresholds]="thresholdConfig">
           </ngx-gauge>
 
         </div>
@@ -95,7 +95,7 @@
                      [value]="lastedSensor.soilTemperature"
                      [label]="gaugeTempLabel"
                      [append]="gaugeTempAppendText"
-                     [thresholds]= "thresholdConfig">
+                     [thresholds]="thresholdConfig">
           </ngx-gauge>
 
         </div>
@@ -128,7 +128,7 @@
                      [value]="lastedSensor.soilMoisture"
                      [label]="gaugeHumidLabel"
                      [append]="gaugeHumidAppendText"
-                     [thresholds]= "thresholdConfig">
+                     [thresholds]="thresholdConfig">
           </ngx-gauge>
 
         </div>
@@ -184,49 +184,34 @@
 
 <div class="row">
   <div class="col-md-4">
-      <div class="card ">
-          <div class="card-header ">
-            <h5 class="card-title">วาล์วน้ำ</h5>
-            <p class="card-category">รูปแบบการควบคุม : รดน้ำอัตโนมัติ</p>
-          </div>
-          <div class="card-body ">
+    <div class="card ">
+      <div class="card-header ">
+        <h5 class="card-title">วาล์วน้ำ</h5>
+        <p class="card-category">รูปแบบการควบคุม : {{valveSelected.text}}</p>
+      </div>
+      <div class="card-body"
+           *ngIf="valveSelected.state != 2">
 
-            <div class="d-flex justify-content-center">
-              <ui-switch [loading]="isLoading"
-                         [beforeChange]="fakeAsync"
-                         [(ngModel)]="enable"
-                         size="large">
-                <i class="fa fa-check"
-                   *ngIf="enable && !isLoading"></i>
-                <i class="fa fa-times"
-                   *ngIf="!enable && !isLoading"></i>
-                <i class="fa fa-spinner fa-pulse"
-                   *ngIf="isLoading"></i>
-              </ui-switch>
-            </div>
-
-            <!-- <canvas id="chartEmail"></canvas> -->
-
-
-            <!-- <div class="card-body "> -->
-
-            <!-- </div> -->
-          </div>
-          <div class="card-footer ">
-            <p>สถานะ : {{ enable && !isLoading ? 'เปิดการใช้งาน' : 'ปิดการใช้งาน'}}</p>
-            <hr>
-            <div class="stats">
-              <a href=""><i class="fas fa-cogs"></i> ตั้งค่าการควบคุมวาล์ว</a>
-            </div>
-          </div>
+        <div class="d-flex justify-content-center">
+          <ui-switch [(ngModel)]="valveEnable"
+                    (change)="onChangeValveState($event)"
+                     size="large">
+            <i class="fa fa-check"
+               *ngIf="valveEnable"></i>
+            <i class="fa fa-times"
+               *ngIf="!valveEnable"></i>
+          </ui-switch>
         </div>
-    </div>
-</div>
-<!-- <button [swal]="deleteSwal">Delete {{ file.name }}</button>
+      </div>
+      <div class="card-footer ">
+        <p *ngIf="valveSelected.state != 2">สถานะ :
+          {{ (valveSelected.state == 1) ? 'เปิดการใช้งาน' : 'ปิดการใช้งาน'}}</p>
+        <hr>
 
-<swal
-  #deleteSwal
-  title="Delete ?"
-  text="This cannot be undone"
-  icon="question">
-</swal> -->
+        <button (click)="valveSettings()"
+                class="btn btn-info"
+                style="width: 100%;"><i class="fas fa-cogs"></i> ตั้งค่าการควบคุมวาล์ว</button>
+      </div>
+    </div>
+  </div>
+</div>

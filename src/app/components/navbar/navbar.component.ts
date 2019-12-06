@@ -70,8 +70,8 @@ export class NavbarComponent implements OnInit{
           const html = document.getElementsByTagName('html')[0];
           const mainPanel =  <HTMLElement>document.getElementsByClassName('main-panel')[0];
           if (window.innerWidth < 991) {
-            setTimeout(function(){
-              mainPanel.style.position = '';
+            setTimeout(() => {
+              // mainPanel['style']['position'] = '';
             }, 500);
           }
           this.toggleButton.classList.remove('toggled');

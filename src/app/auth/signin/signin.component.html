@@ -2,6 +2,7 @@
   <div class="row justify-content-center">
     <div class="col-lg-5 col-md-7">
       <div class="card">
+
         <div class="card-body">
           <div class="row justify-content-center">
             <!-- <img
@@ -15,11 +16,11 @@
           </div>
           <form role="form" class="mx-4" #f="ngForm" (ngSubmit)="loginEmail(f)">
             <div class="form-group">
-              <label for="email">Email address</label>
+              <label for="email">อีเมล</label>
               <input
                 type="email"
                 class="form-control"
-                placeholder="Email"
+                placeholder="อีเมล"
                 required
                 name="email"
                 ngModel
@@ -30,31 +31,42 @@
                 class="text-danger"
                 [hidden]="email.valid || (email.pristine && !f.submitted)"
               >
-                Enter the email correctly</small
+                กรุณากรอกอีเมลให้ถูกต้อง</small
               >
             </div>
             <div class="form-group">
-              <label for="password">Password</label>
+              <label for="password">รหัสผ่าน</label>
               <input
                 type="password"
                 class="form-control"
-                placeholder="Password"
+                placeholder="รหัสผ่าน"
                 required
                 name="password"
                 ngModel
                 #password="ngModel"
               />
             </div>
+            <small
+            class="text-danger"
+            [hidden]="password.valid || (password.pristine && !f.submitted)"
+          >
+            กรุณากรอกรหัสผ่าน</small
+          >
             <div class="text-center">
               <button type="submit" class="btn btn-primary my-4">
-                Sign in
+                เข้าสู่ระบบ
               </button>
+              <div *ngIf="!!alerts">
+                  <div *ngFor="let alert of alerts">
+                      <alert [type]="alert.type" [dismissOnTimeout]="alert.timeout">{{ alert.msg }}</alert>
+                    </div>
+               </div>
               <div class="row mt-2 mx-0">
                   <a
                     [routerLink]="['/forgot-password']"
                     routerLinkActive="active"
                     class="text-primary"
-                    ><small>Forgot password?</small></a
+                    ><small>ลืมรหัสผ่าน?</small></a
                   >
               </div>
             </div>

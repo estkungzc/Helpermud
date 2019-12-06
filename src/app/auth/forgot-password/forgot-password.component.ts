@@ -7,14 +7,32 @@ import { NgForm } from '@angular/forms';
   templateUrl: './forgot-password.component.html'
 })
 export class ForgotPasswordComponent implements OnInit {
-
+  alerts: any[] = [];
   constructor(private auth: AuthService) { }
 
   ngOnInit() {
   }
 
   resetPassword(f: NgForm) {
-    this.auth.resetPassword(f.value.email);
+    if (!f.valid) {
+      return;
+    }
+    const email = f.value.email;
+    this.auth.resetPassword(email)
+    .then(res => {
+      this.alerts.push({
+        type: 'success',
+        msg: `คุณสามารถรีเซตรหัสผ่านได้แล้ว กรุณาตรวจสอบที่อีเมล`,
+        timeout: 5000
+    });
+    })
+    .catch(err => {
+      this.alerts.push({
+        type: 'danger',
+        msg: `${err}`,
+        timeout: 5000
+      });
+    });
   }
 
 }

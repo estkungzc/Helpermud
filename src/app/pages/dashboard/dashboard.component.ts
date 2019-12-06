@@ -10,6 +10,10 @@ import {
   GetDefaultTempChartConfig
 } from 'src/app/constant/chart-config';
 import { GetThresholdGuageConfig } from 'src/app/constant/guage-config';
+import { ValveSettingsComponent } from 'src/app/components/valve-settings/valve-settings.component';
+import { BsModalService } from 'ngx-bootstrap';
+import { modes } from 'src/app/constant/valve-config';
+
 moment.locale('th');
 
 @Component({
@@ -33,17 +37,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   gaugeHumidAppendText = '%';
   thresholdConfig = GetThresholdGuageConfig();
 
-  enable = true;
-  isLoading = false;
-  fakeAsync: Observable<boolean> = new Observable(observer => {
-    console.log(observer);
-    this.isLoading = true;
-    const timeout = setTimeout(() => {
-      this.isLoading = false;
-      observer.next(true);
-    }, 2000);
-    return () => clearTimeout(timeout);
-  });
+  valveSelected = {
+    state: undefined,
+    text: undefined
+  }
+
+  valveEnable;
 
   lastedSensor: SensorDate = {
     airHumidity: 0,
@@ -87,7 +86,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   updateTimeFromNow;
 
-  constructor(private db: DashboardService) {}
+  constructor(
+    private dbService: DashboardService,
+    private modalService: BsModalService
+  ) {}
 
   ngOnInit() {
     this.canvasAirTemp = document.getElementById('airTempChart');
@@ -106,7 +108,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.ctxSoilMois = this.canvasSoilMois.getContext('2d');
     this.soilMoisChart = new Chart(this.ctxSoilMois, this.soilMoisChartConfig);
 
-    const data$ = this.db.getSensorsValue().pipe(
+    const data$ = this.dbService.getSensorsValue().pipe(
       takeUntil(this.unsubscribe$),
       map(k =>
         k.map(x => {
@@ -163,7 +165,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.updateTimeFromNow = setInterval(() => this.fromNowDate = this.lastedSensor.time.fromNow(), 60*1000);
+    this.updateTimeFromNow = setInterval(
+      () => (this.fromNowDate = this.lastedSensor.time.fromNow()),
+      60 * 1000
+    );
+
+    this.dbService.getValveSettings().subscribe(v => {
+      this.valveSelected = {
+        state: v.state,
+        text: v.state === 2 ? 'รดน้ำอัติโนมัติ' : 'รดน้ำควบคุมด้วยตนเอง'
+      };
+      if(v.state !== 2) {
+        this.valveEnable = !!v.state;
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -175,9 +190,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   updateChart(chart: any, type: any, data: SensorData[]) {
     const d1 = data.map(k => k.dataLoc1[type]);
     const d2 = data.map(k => k.dataLoc2[type]);
-    const avg = data.map(
-      k => (k.dataLoc1[type] + k.dataLoc2[type]) / 2
-    );
+    const avg = data.map(k => (k.dataLoc1[type] + k.dataLoc2[type]) / 2);
 
     const p: any[] = [d1, avg, d2];
     for (let index = 0; index < p.length; index++) {
@@ -190,5 +203,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   updateTime(t: any) {
     this.nowDate = t.format('dddd, MMMM Do YYYY, H:mm');
     this.fromNowDate = t.fromNow();
+  }
+
+  valveSettings() {
+    const modalRef = this.modalService.show(ValveSettingsComponent);
+  }
+
+  onChangeValveState(b) {
+    this.dbService.updateValveManual( b ? 1 : 0);
   }
 }
