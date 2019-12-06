@@ -134,7 +134,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     data$.subscribe(x => {
       // console.log(x);
       if (x.length > 0) {
-        const lastValue = x.pop();
+        const lastValue = x[x.length - 1];
 
         const avgAirHumid =
           (lastValue.dataLoc1.airHumidity + lastValue.dataLoc2.airHumidity) / 2;

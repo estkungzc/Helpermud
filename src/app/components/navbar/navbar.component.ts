@@ -71,7 +71,7 @@ export class NavbarComponent implements OnInit{
           const mainPanel =  <HTMLElement>document.getElementsByClassName('main-panel')[0];
           if (window.innerWidth < 991) {
             setTimeout(() => {
-              // mainPanel['style']['position'] = '';
+              mainPanel.style.position = '';
             }, 500);
           }
           this.toggleButton.classList.remove('toggled');
