@@ -27,7 +27,8 @@
           <ngx-gauge [type]="gaugeType"
                      [thick]="10"
                      [value]="lastedSensor.pm25"
-                     [label]="'ไมโครกรัมต่อลูกบาศก์เมตร'">
+                     [label]="'ไมโครกรัมต่อลูกบาศก์เมตร'"
+                     [thresholds]="thresholdConfig">
           </ngx-gauge>
 
         </div>
@@ -56,7 +57,8 @@
           <ngx-gauge [type]="gaugeType"
                      [thick]="10"
                      [value]="lastedSensor.pm10"
-                     [label]="'ไมโครกรัมต่อลูกบาศก์เมตร'">
+                     [label]="'ไมโครกรัมต่อลูกบาศก์เมตร'"
+                     [thresholds]="thresholdConfig">
           </ngx-gauge>
 
         </div>

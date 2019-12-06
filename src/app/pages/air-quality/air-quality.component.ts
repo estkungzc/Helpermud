@@ -6,6 +6,7 @@ import Chart from 'chart.js';
 import * as moment from 'moment';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { GetThresholdPmGuageConfig } from 'src/app/constant/guage-config';
 moment.locale('th');
 
 @Component({
@@ -37,6 +38,8 @@ export class AirQualityComponent implements OnInit, OnDestroy {
   private pm25ChartConfig = GetDefaultAirChartConfig();
 
   updateTimeFromNow;
+
+  thresholdConfig = GetThresholdPmGuageConfig();
 
   constructor(private aqService: AirQualityService) { }
 
