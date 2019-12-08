@@ -54,15 +54,17 @@ export class AirQualityComponent implements OnInit, OnDestroy {
 
     this.aqService.getDataAirQuality().pipe(takeUntil(this.unsubscribe$)).subscribe(x => {
       if (x.length > 0) {
-        this.lastedSensor = x.pop();
+        this.lastedSensor = x[x.length - 1];
         this.lastedSensor.time = moment.unix(this.lastedSensor.time);
-
+        // console.log(this.lastedSensor);
+        // console.log(x.map(k => moment.unix(k.time).format('dddd, MMMM Do YYYY, H:mm')));
         this.updateTime(this.lastedSensor.time);
         this.updateChart(this.pm10Chart, 'pm10', x);
         this.updateChart(this.pm25Chart, 'pm25', x);
       }
     });
     this.updateTimeFromNow = setInterval(() => this.fromNowDate = this.lastedSensor.time.fromNow(), 60*1000);
+
   }
 
   ngOnDestroy() {
@@ -72,13 +74,15 @@ export class AirQualityComponent implements OnInit, OnDestroy {
   }
 
   updateChart(chart: any, type: any, data: AirQualityModel[]) {
-    const pm = data.map(k => k[type]);
+    const x = data;
+    const pm = x.map(k => k[type]);
 
     const p: any[] = [pm];
     for (let index = 0; index < p.length; index++) {
       chart.data.datasets[index].data = p[index];
     }
-    chart.data.labels = data.map(k => moment.unix(k.time).format('H:mm'));
+    chart.data.labels = x.map(k => moment.unix(k.time).format('H:mm'));
+    // console.log(data.map(k => moment.unix(k.time).format('H:mm')));
     chart.update();
   }
 
