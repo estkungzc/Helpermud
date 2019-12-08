@@ -1,14 +1,14 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { BsModalRef } from "ngx-bootstrap";
-import { NgForm } from "@angular/forms";
-import { DashboardService } from "src/app/services/dashboard.service";
-import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { BsModalRef } from 'ngx-bootstrap';
+import { NgForm } from '@angular/forms';
+import { DashboardService } from 'src/app/services/dashboard.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { modes } from 'src/app/constant/valve-config';
 
 @Component({
-  selector: "app-valve-settings",
-  templateUrl: "./valve-settings.component.html"
+  selector: 'app-valve-settings',
+  templateUrl: './valve-settings.component.html'
 })
 export class ValveSettingsComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<boolean> = new Subject();
@@ -40,7 +40,6 @@ export class ValveSettingsComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(f: NgForm) {
-    console.log(this.modeSelected, this.thresholdSelected);
     this.dbService
       .changeValveState(this.modeSelected, this.thresholdSelected)
       .then(() => this.bsModalRef.hide());

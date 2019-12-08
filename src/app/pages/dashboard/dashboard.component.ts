@@ -44,7 +44,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   valveEnable;
 
-  lastedSensor: SensorDate = {
+  lastedSensor = {
     airHumidity: 0,
     airTemperature: 0,
     soilMoisture: 0,

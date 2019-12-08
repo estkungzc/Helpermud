@@ -5,7 +5,7 @@ import { GetDefaultAirChartConfig } from 'src/app/constant/chart-config';
 import Chart from 'chart.js';
 import * as moment from 'moment';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, switchMap, map } from 'rxjs/operators';
 import { GetThresholdPmGuageConfig } from 'src/app/constant/guage-config';
 moment.locale('th');
 
@@ -19,7 +19,7 @@ export class AirQualityComponent implements OnInit, OnDestroy {
   nowDate: string;
   fromNowDate: string;
 
-  lastedSensor: AirQualityModel = {
+  lastedSensor: any = {
     pm10: 0,
     pm25: 0,
     time: undefined
@@ -41,7 +41,7 @@ export class AirQualityComponent implements OnInit, OnDestroy {
 
   thresholdConfig = GetThresholdPmGuageConfig();
 
-  constructor(private aqService: AirQualityService) { }
+  constructor(private aqService: AirQualityService) {}
 
   ngOnInit() {
     this.canvasPm10 = document.getElementById('pm10Chart');
@@ -52,19 +52,25 @@ export class AirQualityComponent implements OnInit, OnDestroy {
     this.ctxPm25 = this.canvasPm25.getContext('2d');
     this.pm25Chart = new Chart(this.ctxPm25, this.pm25ChartConfig);
 
-    this.aqService.getDataAirQuality().pipe(takeUntil(this.unsubscribe$)).subscribe(x => {
-      if (x.length > 0) {
-        this.lastedSensor = x[x.length - 1];
-        this.lastedSensor.time = moment.unix(this.lastedSensor.time);
-        // console.log(this.lastedSensor);
-        // console.log(x.map(k => moment.unix(k.time).format('dddd, MMMM Do YYYY, H:mm')));
-        this.updateTime(this.lastedSensor.time);
-        this.updateChart(this.pm10Chart, 'pm10', x);
-        this.updateChart(this.pm25Chart, 'pm25', x);
-      }
+    const data$ = this.aqService
+      .getDataAirQuality()
+      .pipe(takeUntil(this.unsubscribe$));
+    data$.subscribe(x => {
+      const lastIndex = x[x.length - 1];
+      this.lastedSensor = {
+        pm10: lastIndex.pm10,
+        pm25: lastIndex.pm10,
+        time: moment.unix(lastIndex.time)
+      };
+      this.updateTime(this.lastedSensor.time);
+      this.updateChart(this.pm10Chart, 'pm10', x);
+      this.updateChart(this.pm25Chart, 'pm25', x);
     });
-    this.updateTimeFromNow = setInterval(() => this.fromNowDate = this.lastedSensor.time.fromNow(), 60*1000);
 
+    this.updateTimeFromNow = setInterval(
+      () => (this.fromNowDate = this.lastedSensor.time.fromNow()),
+      60 * 1000
+    );
   }
 
   ngOnDestroy() {
@@ -74,15 +80,14 @@ export class AirQualityComponent implements OnInit, OnDestroy {
   }
 
   updateChart(chart: any, type: any, data: AirQualityModel[]) {
-    const x = data;
-    const pm = x.map(k => k[type]);
+    const pm = data.map(k => k[type]);
 
     const p: any[] = [pm];
     for (let index = 0; index < p.length; index++) {
       chart.data.datasets[index].data = p[index];
     }
-    chart.data.labels = x.map(k => moment.unix(k.time).format('H:mm'));
-    // console.log(data.map(k => moment.unix(k.time).format('H:mm')));
+    chart.data.labels = data.map(k => moment.unix(k.time).format('H:mm'));
+
     chart.update();
   }
 
@@ -90,5 +95,4 @@ export class AirQualityComponent implements OnInit, OnDestroy {
     this.nowDate = t.format('dddd, MMMM Do YYYY, H:mm');
     this.fromNowDate = t.fromNow();
   }
-
 }
