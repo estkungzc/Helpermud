@@ -59,7 +59,7 @@ export class AirQualityComponent implements OnInit, OnDestroy {
       const lastIndex = x[x.length - 1];
       this.lastedSensor = {
         pm10: lastIndex.pm10,
-        pm25: lastIndex.pm10,
+        pm25: lastIndex.pm25,
         time: moment.unix(lastIndex.time)
       };
       this.updateTime(this.lastedSensor.time);
