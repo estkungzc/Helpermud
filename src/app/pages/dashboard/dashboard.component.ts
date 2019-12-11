@@ -1,25 +1,25 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import Chart from 'chart.js';
-import { Observable, Subject } from 'rxjs';
-import { DashboardService } from 'src/app/services/dashboard.service';
-import { Sensor, SensorData, SensorDate } from 'src/app/models/sensors.model';
-import { map, last, takeUntil } from 'rxjs/operators';
-import * as moment from 'moment';
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import Chart from "chart.js";
+import { Observable, Subject } from "rxjs";
+import { DashboardService } from "src/app/services/dashboard.service";
+import { Sensor, SensorData, SensorDate } from "src/app/models/sensors.model";
+import { map, last, takeUntil } from "rxjs/operators";
+import * as moment from "moment";
 import {
   GetDefaultHumidChartConfig,
-  GetDefaultTempChartConfig
-} from 'src/app/constant/chart-config';
-import { GetThresholdGuageConfig } from 'src/app/constant/guage-config';
-import { ValveSettingsComponent } from 'src/app/components/valve-settings/valve-settings.component';
-import { BsModalService } from 'ngx-bootstrap';
-import { modes } from 'src/app/constant/valve-config';
+  GetDefaultTempChartConfig,
+  locationSensor
+} from "src/app/constant/chart-config";
+import { GetThresholdGuageConfig } from "src/app/constant/guage-config";
+import { ValveSettingsComponent } from "src/app/components/valve-settings/valve-settings.component";
+import { BsModalService } from "ngx-bootstrap";
 
-moment.locale('th');
+moment.locale("th");
 
 @Component({
   selector: "dashboard-cmp",
   moduleId: module.id,
-  templateUrl: 'dashboard.component.html',
+  templateUrl: "dashboard.component.html",
   styles: [
     `
       ngx-gauge {
@@ -30,17 +30,18 @@ moment.locale('th');
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<boolean> = new Subject();
-  gaugeType = 'semi';
-  gaugeTempLabel = 'องศาเซลเซียส';
-  gaugeTempAppendText = '°C';
-  gaugeHumidLabel = 'เปอร์เซ็นต์';
-  gaugeHumidAppendText = '%';
+  gaugeType = "semi";
+  guageLabel = "เซนเซอร์ในโรงเพาะเห็ด"
+  gaugeTempLabel = "องศาเซลเซียส";
+  gaugeTempAppendText = "°C";
+  gaugeHumidLabel = "เปอร์เซ็นต์";
+  gaugeHumidAppendText = "%";
   thresholdConfig = GetThresholdGuageConfig();
 
   valveSelected = {
     state: undefined,
     text: undefined
-  }
+  };
 
   valveEnable;
 
@@ -75,16 +76,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private soilMoisChartConfig = GetDefaultHumidChartConfig();
 
   private attrSensors = {
-    airTemp: 'airTemperature',
-    airHumid: 'airHumidity',
-    soilTemp: 'soilTemperature',
-    soilMois: 'soilMoisture'
+    airTemp: "airTemperature",
+    airHumid: "airHumidity",
+    soilTemp: "soilTemperature",
+    soilMois: "soilMoisture"
   };
 
   nowDate: string;
   fromNowDate: string;
 
   updateTimeFromNow;
+  loc = locationSensor;
 
   constructor(
     private dbService: DashboardService,
@@ -92,20 +94,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.canvasAirTemp = document.getElementById('airTempChart');
-    this.ctxAirTemp = this.canvasAirTemp.getContext('2d');
+    // console.log(this.loc);
+    this.canvasAirTemp = document.getElementById("airTempChart");
+    this.ctxAirTemp = this.canvasAirTemp.getContext("2d");
     this.airTempChart = new Chart(this.ctxAirTemp, this.airTempChartConfig);
 
-    this.canvasAirHumid = document.getElementById('airHumidChart');
-    this.ctxAirHumid = this.canvasAirHumid.getContext('2d');
+    this.canvasAirHumid = document.getElementById("airHumidChart");
+    this.ctxAirHumid = this.canvasAirHumid.getContext("2d");
     this.airHumidChart = new Chart(this.ctxAirHumid, this.airHumidChartConfig);
 
-    this.canvasSoilTemp = document.getElementById('soilTempChart');
-    this.ctxSoilTemp = this.canvasSoilTemp.getContext('2d');
+    this.canvasSoilTemp = document.getElementById("soilTempChart");
+    this.ctxSoilTemp = this.canvasSoilTemp.getContext("2d");
     this.soilTempChart = new Chart(this.ctxSoilTemp, this.soilTempChartConfig);
 
-    this.canvasSoilMois = document.getElementById('soilMoisChart');
-    this.ctxSoilMois = this.canvasSoilMois.getContext('2d');
+    this.canvasSoilMois = document.getElementById("soilMoisChart");
+    this.ctxSoilMois = this.canvasSoilMois.getContext("2d");
     this.soilMoisChart = new Chart(this.ctxSoilMois, this.soilMoisChartConfig);
 
     const data$ = this.dbService.getSensorsValue().pipe(
@@ -132,30 +135,36 @@ export class DashboardComponent implements OnInit, OnDestroy {
     );
 
     data$.subscribe(x => {
-      // console.log(x);
       if (x.length > 0) {
         const lastValue = x[x.length - 1];
 
-        const avgAirHumid =
-          (lastValue.dataLoc1.airHumidity + lastValue.dataLoc2.airHumidity) / 2;
-        const avgAirTemp =
-          (lastValue.dataLoc1.airTemperature +
-            lastValue.dataLoc2.airTemperature) /
-          2;
-        const avgSoilMois =
-          (lastValue.dataLoc1.soilMoisture + lastValue.dataLoc2.soilMoisture) /
-          2;
-        const avgSoilTemp =
-          (lastValue.dataLoc1.soilTemperature +
-            lastValue.dataLoc2.soilTemperature) /
-          2;
+        // const avgAirHumid =
+        //   (lastValue.dataLoc1.airHumidity + lastValue.dataLoc2.airHumidity) / 2;
+        // const avgAirTemp =
+        //   (lastValue.dataLoc1.airTemperature +
+        //     lastValue.dataLoc2.airTemperature) /
+        //   2;
+        // const avgSoilMois =
+        //   (lastValue.dataLoc1.soilMoisture + lastValue.dataLoc2.soilMoisture) /
+        //   2;
+        // const avgSoilTemp =
+        //   (lastValue.dataLoc1.soilTemperature +
+        //     lastValue.dataLoc2.soilTemperature) /
+        //   2;
         this.lastedSensor = {
-          airHumidity: avgAirHumid,
-          airTemperature: avgAirTemp,
-          soilMoisture: avgSoilMois,
-          soilTemperature: avgSoilTemp,
+          airHumidity: lastValue.dataLoc1.airHumidity,
+          airTemperature: lastValue.dataLoc1.airTemperature,
+          soilMoisture: lastValue.dataLoc1.soilMoisture,
+          soilTemperature: lastValue.dataLoc1.soilTemperature,
           time: moment.unix(lastValue.time)
         };
+
+        // loc1: in, loc2 out
+        // this.lastedLoc = [lastValue.dataLoc2, lastValue.dataLoc1];
+        // this.airTempValues = this.lastedLoc.map(e => e.airTemperature);
+        // this.airHumidValues = this.lastedLoc.map(e => e.airHumidity);
+        // this.soilTempValues = this.lastedLoc.map(e => e.soilTemperature);
+        // this.soilMoisValues = this.lastedLoc.map(e => e.soilMoisture);
 
         this.updateTime(this.lastedSensor.time);
         this.updateChart(this.airTempChart, this.attrSensors.airTemp, x);
@@ -173,9 +182,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.dbService.getValveSettings().subscribe(v => {
       this.valveSelected = {
         state: v.state,
-        text: v.state === 2 ? 'รดน้ำอัติโนมัติ' : 'รดน้ำควบคุมด้วยตนเอง'
+        text: v.state === 2 ? "รดน้ำอัติโนมัติ" : "รดน้ำควบคุมด้วยตนเอง"
       };
-      if(v.state !== 2) {
+      if (v.state !== 2) {
         this.valveEnable = !!v.state;
       }
     });
@@ -196,12 +205,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     for (let index = 0; index < p.length; index++) {
       chart.data.datasets[index].data = p[index];
     }
-    chart.data.labels = data.map(k => moment.unix(k.time).format('H:mm'));
+    chart.data.labels = data.map(k => moment.unix(k.time).format("H:mm"));
     chart.update();
   }
 
   updateTime(t: any) {
-    this.nowDate = t.format('dddd, MMMM Do YYYY, H:mm');
+    this.nowDate = t.format("dddd, MMMM Do YYYY, H:mm");
     this.fromNowDate = t.fromNow();
   }
 
@@ -210,6 +219,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onChangeValveState(b) {
-    this.dbService.updateValveManual( b ? 1 : 0);
+    this.dbService.updateValveManual(b ? 1 : 0);
   }
 }

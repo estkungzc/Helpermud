@@ -24,7 +24,6 @@ import { SignupComponent } from './auth/signup/signup.component';
 import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
 import { ValveSettingsComponent } from './components/valve-settings/valve-settings.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,6 +51,7 @@ import { ValveSettingsComponent } from './components/valve-settings/valve-settin
     FooterModule,
     ModalModule.forRoot(),
     AlertModule.forRoot()
+
   ],
   providers: [],
   bootstrap: [AppComponent]

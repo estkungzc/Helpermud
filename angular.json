@@ -34,7 +34,9 @@
               "src/assets/scss/paper-dashboard.scss",
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.css",
-              "./node_modules/ngx-ui-switch/ui-switch.component.css"
+              "./node_modules/ngx-ui-switch/ui-switch.component.css",
+              "node_modules/devextreme/dist/css/dx.common.css",
+              "node_modules/devextreme/dist/css/dx.light.css"
             ],
             "scripts": []
           },

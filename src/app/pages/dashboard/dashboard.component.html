@@ -1,6 +1,14 @@
 <div class="row"
-     style="padding: 2px 2px 2px 15px !important;">
-  <p>อัพเดทค่าเมื่อ : {{ nowDate }}</p>
+     style="padding: 0px 15px 0px 15px !important">
+  <div class="card" style="width: 100%;">
+    <p class="my-2 mx-4">{{loc[1]}}</p>
+  </div>
+</div>
+<div class="row"
+     style="padding: 0px 15px 0px 15px !important">
+  <div class="card" style="width: 100%;">
+    <p class="my-2 mx-4">อัพเดทค่าเมื่อ : {{ nowDate }}</p>
+  </div>
 </div>
 <div class="row">
   <div class="col-lg-3 col-md-6 col-sm-6">
@@ -194,7 +202,7 @@
 
         <div class="d-flex justify-content-center">
           <ui-switch [(ngModel)]="valveEnable"
-                    (change)="onChangeValveState($event)"
+                     (change)="onChangeValveState($event)"
                      size="large">
             <i class="fa fa-check"
                *ngIf="valveEnable"></i>

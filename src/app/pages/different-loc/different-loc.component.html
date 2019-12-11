@@ -1,0 +1,163 @@
+<div class="row"
+     style="padding: 0px 15px 0px 15px !important">
+  <div class="card" style="width: 100%;">
+    <p class="my-2 mx-4">อัพเดทค่าเมื่อ : {{ nowDate }}</p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-6 col-md-6 col-sm-6">
+    <div class="card card-stats">
+      <div class="card-body ">
+        <div class="row">
+          <div class="col-5 col-md-4">
+            <div class="icon-big text-center icon-warning">
+              <i class="fas fa-temperature-low text-warning"></i>
+            </div>
+          </div>
+          <div class="col-7 col-md-8">
+            <div class="numbers">
+              <p class="card-category">อากาศ</p>
+              <p class="card-title">อุณหภูมิ
+                <p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer ">
+        <hr>
+          <dx-bar-gauge id="gauge"
+                        [startValue]="0"
+                        [endValue]="100"
+                        [values]="airTempValues">
+            <dxo-label [indent]="30"
+                       [customizeText]="customizeTempLabel">
+              <dxo-format type="fixedPoint"
+                          [precision]="1"></dxo-format>
+            </dxo-label>
+            <dxo-legend [visible]="true"
+                        verticalAlignment="bottom"
+                        horizontalAlignment="center"
+                        [customizeText]="customizeLegend">
+            </dxo-legend>
+          </dx-bar-gauge>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6">
+    <div class="card card-stats">
+      <div class="card-body ">
+        <div class="row">
+          <div class="col-5 col-md-4">
+            <div class="icon-big text-center icon-warning">
+              <i class="fas fa-cloud-rain text-info"></i>
+            </div>
+          </div>
+          <div class="col-7 col-md-8">
+            <div class="numbers">
+              <p class="card-category">อากาศ</p>
+              <p class="card-title">ความชื้น
+                <p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer ">
+        <hr>
+          <dx-bar-gauge id="gauge"
+                        [startValue]="0"
+                        [endValue]="100"
+                        [values]="airHumidValues">
+            <dxo-label [indent]="30"
+                       [customizeText]="customizeHumidLabel">
+              <dxo-format type="fixedPoint"
+                          [precision]="1"></dxo-format>
+            </dxo-label>
+            <dxo-legend [visible]="true"
+                        verticalAlignment="bottom"
+                        horizontalAlignment="center"
+                        [customizeText]="customizeLegend">
+            </dxo-legend>
+          </dx-bar-gauge>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-6 col-md-6 col-sm-6">
+    <div class="card card-stats">
+      <div class="card-body ">
+        <div class="row">
+          <div class="col-5 col-md-4">
+            <div class="icon-big text-center icon-warning">
+              <i class="fas fa-thermometer-three-quarters text-success"></i>
+            </div>
+          </div>
+          <div class="col-7 col-md-8">
+            <div class="numbers">
+              <p class="card-category">ดิน</p>
+              <p class="card-title">อุณหภูมิ
+                <p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer ">
+        <hr>
+          <dx-bar-gauge id="gauge"
+                        [startValue]="0"
+                        [endValue]="100"
+                        [values]="soilTempValues">
+            <dxo-label [indent]="30"
+                       [customizeText]="customizeTempLabel">
+              <dxo-format type="fixedPoint"
+                          [precision]="1"></dxo-format>
+            </dxo-label>
+            <dxo-legend [visible]="true"
+                        verticalAlignment="bottom"
+                        horizontalAlignment="center"
+                        [customizeText]="customizeLegend">
+            </dxo-legend>
+          </dx-bar-gauge>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6">
+    <div class="card card-stats">
+      <div class="card-body ">
+        <div class="row">
+          <div class="col-5 col-md-4">
+            <div class="icon-big text-center icon-warning">
+              <i class="fas fa-tint text-primary"></i>
+            </div>
+          </div>
+          <div class="col-7 col-md-8">
+            <div class="numbers">
+              <p class="card-category">ดิน</p>
+              <p class="card-title">ความชื้น
+                <p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer ">
+        <hr>
+          <dx-bar-gauge id="gauge"
+                        [startValue]="0"
+                        [endValue]="100"
+                        [values]="soilMoisValues">
+            <dxo-label [indent]="30"
+                       [customizeText]="customizeHumidLabel">
+              <dxo-format type="fixedPoint"
+                          [precision]="1"></dxo-format>
+            </dxo-label>
+            <dxo-legend [visible]="true"
+                        verticalAlignment="bottom"
+                        horizontalAlignment="center"
+                        [customizeText]="customizeLegend">
+            </dxo-legend>
+          </dx-bar-gauge>
+      </div>
+    </div>
+  </div>
+</div>

@@ -9,7 +9,7 @@ export function GetDefaultTempChartConfig(): any {
           backgroundColor: '#6bd098',
           borderWidth: 2,
           fill: false,
-          label: 'เซนเซอร์จุดตรงกลาง',
+          label: 'เซนเซอร์ในโรงเพาะเห็ด',
           data: []
         },
         {
@@ -26,7 +26,7 @@ export function GetDefaultTempChartConfig(): any {
           backgroundColor: '#f17e5d',
           borderWidth: 2,
           fill: false,
-          label: 'เซนเซอร์จุดหน้าประตู',
+          label: 'เซนเซอร์นอกโรงเพาะเห็ด',
           data: []
         }
       ]
@@ -196,3 +196,9 @@ export function GetDefaultAirChartConfig(): any {
     }
   };
 }
+
+export const locationSensor: string[] = [
+  'เซนเซอร์นอกโรงเพาะเห็ด',
+  'เซนเซอร์ในโรงเพาะเห็ด'
+];
+

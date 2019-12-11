@@ -14,6 +14,8 @@ import { UiSwitchModule } from 'ngx-ui-switch';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { AirQualityComponent } from 'src/app/pages/air-quality/air-quality.component';
+import { DxBarGaugeModule, DxSelectBoxModule } from 'devextreme-angular';
+import { DifferentLocComponent } from 'src/app/pages/different-loc/different-loc.component';
 
 
 @NgModule({
@@ -25,11 +27,14 @@ import { AirQualityComponent } from 'src/app/pages/air-quality/air-quality.compo
     NgxGaugeModule,
     UiSwitchModule,
     TabsModule.forRoot(),
-    SweetAlert2Module.forRoot()
+    SweetAlert2Module.forRoot(),
+    DxBarGaugeModule,
+    DxSelectBoxModule
   ],
   declarations: [
     DashboardComponent,
-    AirQualityComponent
+    AirQualityComponent,
+    DifferentLocComponent
   ]
 })
 export class AdminLayoutModule {}
