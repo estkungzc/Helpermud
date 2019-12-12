@@ -1,13 +1,13 @@
 export const environment = {
   production: true,
   firebase: {
-    apiKey: "AIzaSyAYurp2l1_nZNRT6BBDK4GJfYX1g39l6Q4",
-    authDomain: "smartfarmtesting.firebaseapp.com",
-    databaseURL: "https://smartfarmtesting.firebaseio.com",
-    projectId: "smartfarmtesting",
-    storageBucket: "smartfarmtesting.appspot.com",
-    messagingSenderId: "859448916825",
-    appId: "1:859448916825:web:bf7604a7fd4a01dfd12a48",
-    measurementId: "G-0RZJCNSN17"
+    apiKey: 'AIzaSyBn_DUF0GrpPvbwMw8ZRl0d0iFw8j1c7RU',
+    authDomain: 'sansara-farm.firebaseapp.com',
+    databaseURL: 'https://sansara-farm.firebaseio.com',
+    projectId: 'sansara-farm',
+    storageBucket: 'sansara-farm.appspot.com',
+    messagingSenderId: '839152960284',
+    appId: '1:839152960284:web:7852a773b7437272e8f0d9',
+    measurementId: 'G-TKH388907G'
   }
 };
