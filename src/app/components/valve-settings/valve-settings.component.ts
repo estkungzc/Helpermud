@@ -5,6 +5,7 @@ import { DashboardService } from 'src/app/services/dashboard.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { modes } from 'src/app/constant/valve-config';
+import { ValveSettingModel } from 'src/app/models/valve-setting.model';
 
 @Component({
   selector: 'app-valve-settings',
@@ -16,6 +17,7 @@ export class ValveSettingsComponent implements OnInit, OnDestroy {
 
   modeSelected = 0;
   thresholdSelected = 0;
+  wateringPeriodSelected = 0;
   constructor(
     public bsModalRef: BsModalRef,
     private dbService: DashboardService
@@ -31,6 +33,7 @@ export class ValveSettingsComponent implements OnInit, OnDestroy {
         }
         this.modeSelected = x.state;
         this.thresholdSelected = x.threshold;
+        this.wateringPeriodSelected = x.wateringPeriod;
       });
   }
 
@@ -40,8 +43,16 @@ export class ValveSettingsComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(f: NgForm) {
+    if (f.invalid) {
+      return;
+    }
+    const settings: ValveSettingModel = {
+      state: this.modeSelected,
+      threshold: this.thresholdSelected,
+      wateringPeriod: this.wateringPeriodSelected
+    }
     this.dbService
-      .changeValveState(this.modeSelected, this.thresholdSelected)
+      .changeValveState(settings)
       .then(() => this.bsModalRef.hide());
   }
 }

@@ -49,6 +49,7 @@ export class DifferentLocComponent implements OnInit {
     );
 
     data$.subscribe(x => {
+      console.log(x.map(k => moment.unix(k.time).format('dddd, MMMM Do YYYY, H:mm')));
       if (x.length > 0) {
         const lastValue = x[x.length - 1];
         // loc1: in, loc2 out

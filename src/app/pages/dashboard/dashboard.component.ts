@@ -94,7 +94,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    // console.log(this.loc);
     this.canvasAirTemp = document.getElementById("airTempChart");
     this.ctxAirTemp = this.canvasAirTemp.getContext("2d");
     this.airTempChart = new Chart(this.ctxAirTemp, this.airTempChartConfig);
@@ -137,20 +136,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     data$.subscribe(x => {
       if (x.length > 0) {
         const lastValue = x[x.length - 1];
-
-        // const avgAirHumid =
-        //   (lastValue.dataLoc1.airHumidity + lastValue.dataLoc2.airHumidity) / 2;
-        // const avgAirTemp =
-        //   (lastValue.dataLoc1.airTemperature +
-        //     lastValue.dataLoc2.airTemperature) /
-        //   2;
-        // const avgSoilMois =
-        //   (lastValue.dataLoc1.soilMoisture + lastValue.dataLoc2.soilMoisture) /
-        //   2;
-        // const avgSoilTemp =
-        //   (lastValue.dataLoc1.soilTemperature +
-        //     lastValue.dataLoc2.soilTemperature) /
-        //   2;
         this.lastedSensor = {
           airHumidity: lastValue.dataLoc1.airHumidity,
           airTemperature: lastValue.dataLoc1.airTemperature,
@@ -160,12 +145,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         };
 
         // loc1: in, loc2 out
-        // this.lastedLoc = [lastValue.dataLoc2, lastValue.dataLoc1];
-        // this.airTempValues = this.lastedLoc.map(e => e.airTemperature);
-        // this.airHumidValues = this.lastedLoc.map(e => e.airHumidity);
-        // this.soilTempValues = this.lastedLoc.map(e => e.soilTemperature);
-        // this.soilMoisValues = this.lastedLoc.map(e => e.soilMoisture);
-
         this.updateTime(this.lastedSensor.time);
         this.updateChart(this.airTempChart, this.attrSensors.airTemp, x);
         this.updateChart(this.airHumidChart, this.attrSensors.airHumid, x);

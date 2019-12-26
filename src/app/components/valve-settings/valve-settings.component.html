@@ -46,6 +46,19 @@
                #threshold="ngModel">
       </div>
     </div>
+    <div class="form-group row">
+      <label for="wateringPeriod"
+             class="col-sm col-form-label">ระยะเวลารดน้ำ (นาที)</label>
+      <div class="col-sm">
+        <input type="number"
+               class="form-control"
+               id="wateringPeriod"
+               min="0"
+               name="wateringPeriod"
+               [(ngModel)]="wateringPeriodSelected"
+               #wateringPeriod="ngModel">
+      </div>
+    </div>
   </div>
 
   <div class="d-flex justify-content-end mx-3">
