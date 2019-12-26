@@ -6,6 +6,6 @@ import { DifferentLocComponent } from 'src/app/pages/different-loc/different-loc
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
-    { path: 'air-quality',      component: AirQualityComponent },
+    // { path: 'air-quality',      component: AirQualityComponent },
     { path: 'diff-location',      component: DifferentLocComponent }
 ];
