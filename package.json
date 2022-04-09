@@ -32,7 +32,7 @@
     "devextreme-angular": "19.2.4",
     "firebase": "^7.3.0",
     "jquery": "3.4.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "ngx-bootstrap": "^5.2.0",
     "ngx-gauge": "^1.0.0-beta.11",
     "ngx-toastr": "10.0.4",
